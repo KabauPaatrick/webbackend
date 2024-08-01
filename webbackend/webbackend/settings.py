@@ -25,15 +25,14 @@ STATICFILES_DIRS = [
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-=@os3v93jvz35l8__#9lvbfevb%mz5c0%&lhco@2!&saqe&hem"
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "your_default_secret_key")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DJANGO_DEBUG", "False") == "True"
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "*").split(",")
 
 # Application definition
-
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -41,13 +40,11 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    
     'rest_framework',
     'rest_framework.authtoken',
     'django_filters',
     "corsheaders",
     'authemail',
-    
     'accounts',
     'achievemets',
     'customer',
@@ -62,9 +59,7 @@ INSTALLED_APPS = [
     'testimonials',
     'license',
     'users',
-    # 'logo',
-    'product',
-     'cloudinary',
+    'cloudinary',
     'cloudinary_storage',
     'category',
     'brands',
@@ -72,18 +67,17 @@ INSTALLED_APPS = [
     'Enquiry',
     'payments',
     'FileUpload'
-
 ]
+
 CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': 'dkekd92kz',
-    'API_KEY': '187641184772337',
-    'API_SECRET': '8Hwz-YRED2DXRsspD_wzNDO67OI',
+    'CLOUD_NAME': os.getenv('CLOUD_NAME', 'dkekd92kz'),
+    'API_KEY': os.getenv('CLOUD_API_KEY', '187641184772337'),
+    'API_SECRET': os.getenv('CLOUD_API_SECRET', '8Hwz-YRED2DXRsspD_wzNDO67OI'),
 }
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
-CLOUDINARY_URL = 'cloudinary://187641184772337:8Hwz-YRED2DXRsspD_wzNDO67OI@dkekd92kz'
-
+CLOUDINARY_URL = f"cloudinary://{os.getenv('CLOUD_API_KEY')}:{os.getenv('CLOUD_API_SECRET')}@{os.getenv('CLOUD_NAME')}"
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -119,25 +113,18 @@ TEMPLATES = [
 WSGI_APPLICATION = "webbackend.wsgi.application"
 
 # Database
-# https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'disiweb',
-        'USER': 'root',
-        'PASSWORD': 'Pato@254',
-        'HOST': 'localhost',
-        'PORT': '3306',
-        # 'OPTIONS': {
-        #     'unix_socket': '/var/run/mysqld/mysqld.sock',  
-        # },
+        'NAME': os.getenv('DB_NAME', 'disiweb'),
+        'USER': os.getenv('DB_USER', 'root'),
+        'PASSWORD': os.getenv('DB_PASSWORD', 'Pato@254'),
+        'HOST': os.getenv('DB_HOST', 'localhost'),
+        'PORT': os.getenv('DB_PORT', '3306'),
     }
 }
 
 # Password validation
-# https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
@@ -152,42 +139,11 @@ AUTH_PASSWORD_VALIDATORS = [
         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
-# LOGGING = {
-#     'version': 1,
-#     'disable_existing_loggers': False,
-#     'handlers': {
-#         'console': {
-#             'level': 'DEBUG',
-#             'class': 'logging.StreamHandler',
-#         },
-#     },
-#     'loggers': {
-#         'django': {
-#             'handlers': ['console'],
-#             'level': 'DEBUG',
-#             'propagate': True,
-#         },
-#     },
-# }
-
-# Internationalization
-# https://docs.djangoproject.com/en/4.2/topics/i18n/
 
 LANGUAGE_CODE = "en-us"
-
 TIME_ZONE = "UTC"
-
 USE_I18N = True
-
 USE_TZ = True
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.2/howto/static-files/
-
-STATIC_URL = "/static/"
-
-# Default primary key field type
-# https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
@@ -195,7 +151,7 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
     ),
-     'DEFAULT_PARSER_CLASSES': (
+    'DEFAULT_PARSER_CLASSES': (
         'rest_framework.parsers.JSONParser',
         'rest_framework.parsers.MultiPartParser',
         'rest_framework.parsers.FormParser',
@@ -203,12 +159,10 @@ REST_FRAMEWORK = {
 }
 
 EMAIL_BACKEND = 'django.core.mail.backends.async.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'  
+EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'kabaupaatrick@gmail.com'  # Your email address
-EMAIL_HOST_PASSWORD = 'pwci uumf rbhj vjdg'  # email pass 
-DEBUG_EMAIL = True
-
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', 'kabaupaatrick@gmail.com')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', 'pwci uumf rbhj vjdg')
 
 AUTH_USER_MODEL = 'users.User'
