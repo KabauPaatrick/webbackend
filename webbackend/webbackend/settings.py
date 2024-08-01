@@ -66,6 +66,7 @@ INSTALLED_APPS = [
     'colors',
     'Enquiry',
     'payments',
+    'product',
     'FileUpload'
 ]
 
