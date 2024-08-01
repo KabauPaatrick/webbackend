@@ -1,0 +1,13 @@
+# Ignore Python bytecode files
+**/__pycache__/
+**/*.pyc
+
+# Ignore migrations' bytecode files
+**/migrations/__pycache__/
+**/migrations/*.pyc
+
+# Ignore other generated files (adjust as needed)
+**/media/
+**/static/
+**/uploads/
+
