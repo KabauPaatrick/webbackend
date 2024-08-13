@@ -67,13 +67,14 @@ INSTALLED_APPS = [
     'Enquiry',
     'payments',
     'product',
-    'FileUpload'
+    'FileUpload',
+    'locations'
 ]
 
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': os.getenv('CLOUD_NAME', 'dkekd92kz'),
-    'API_KEY': os.getenv('CLOUD_API_KEY', '187641184772337'),
-    'API_SECRET': os.getenv('CLOUD_API_SECRET', '8Hwz-YRED2DXRsspD_wzNDO67OI'),
+    'API_KEY': os.getenv('CLOUD_API_KEY', 'xxxxxx'),
+    'API_SECRET': os.getenv('CLOUD_API_SECRET', 'xxxxx'),
 }
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'

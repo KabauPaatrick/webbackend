@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from .models import Product, ProductImage
+from .models import Product, ProductImage,Location, DropOffPoint
+
 import cloudinary.uploader
 
 class ProductImageSerializer(serializers.ModelSerializer):
@@ -7,22 +8,28 @@ class ProductImageSerializer(serializers.ModelSerializer):
         model = ProductImage
         fields = ['id', 'product', 'file', 'asset_id', 'public_id']
         read_only_fields = ['id', 'asset_id', 'public_id']
-
+        
 class ProductSerializer(serializers.ModelSerializer):
     images = ProductImageSerializer(many=True, read_only=True)
     image_files = serializers.ListField(
         child=serializers.ImageField(), write_only=True, required=False
     )
     tags = serializers.JSONField(required=False, allow_null=True)
+    details = serializers.SerializerMethodField()  # Transform details to a list
 
     class Meta:
         model = Product
         fields = [
-            'id', 'title', 'description', 'slug', 'price', 'category', 'brand', 
-            'quantity', 'sold', 'colors', 'image', 'tags', 'total_ratings', 
-            'ratings', 'created_at', 'updated_at', 'images', 'image_files'
+            'id', 'title', 'description', 'details', 'slug', 'price',
+            'category', 'brand', 'quantity', 'sold', 'colors', 'image',
+            'tags', 'total_ratings', 'ratings', 'created_at', 'updated_at',
+            'images', 'image_files','location', 'drop_off_point', 'delivery_charges', 'units_left', 'related_products'
         ]
         read_only_fields = ['id', 'created_at', 'updated_at', 'total_ratings', 'ratings']
+
+    def get_details(self, obj):
+        # Convert the details text into a list based on a separator, e.g., new line
+        return obj.details.split('\r\n') if obj.details else []
 
     def create(self, validated_data):
         image_files = validated_data.pop('image_files', [])
@@ -50,6 +57,7 @@ class ProductSerializer(serializers.ModelSerializer):
         # Update fields on the product instance
         instance.title = validated_data.get('title', instance.title)
         instance.description = validated_data.get('description', instance.description)
+        instance.details = validated_data.get('details', instance.details)
         instance.slug = validated_data.get('slug', instance.slug)
         instance.price = validated_data.get('price', instance.price)
         instance.category = validated_data.get('category', instance.category)
