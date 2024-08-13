@@ -3,14 +3,15 @@ from django.contrib.auth import get_user_model
 
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=True, style={'input_type': 'password'})
+    password_confirm = serializers.CharField(write_only=True, required=True, style={'input_type': 'password'})
 
     class Meta:
         model = get_user_model()
-        fields = ('id', 'first_name','last_name','username', 'email', 'phone_number', 'address', 'password')
+        fields = ('id', 'first_name', 'last_name', 'username', 'email', 'phone_number', 'address', 'password', 'password_confirm')
 
     def validate(self, attrs):
         password = attrs.get('password')
-        password_confirm = self.context.get('request').data.get('password_confirm')
+        password_confirm = attrs.get('password_confirm')
 
         if password and password_confirm and password != password_confirm:
             raise serializers.ValidationError("Passwords do not match")
@@ -24,3 +25,7 @@ class UserSerializer(serializers.ModelSerializer):
             user.set_password(password)
         user.save()
         return user
+
+    def delete(self, instance):
+        """ Custom method to delete a user instance. """
+        instance.delete()

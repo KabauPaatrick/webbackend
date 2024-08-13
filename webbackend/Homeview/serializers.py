@@ -1,9 +1,13 @@
+# serializers.py
 from rest_framework import serializers
 from .models import HomeView
 
 class HomeViewSerializer(serializers.ModelSerializer):
-    id = serializers.UUIDField(read_only=True)
-
     class Meta:
         model = HomeView
-        fields = ['id', 'title', 'description', 'ctatext', 'entity', 'image']
+        fields = '__all__'
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        # No need to alter the image URL
+        return representation

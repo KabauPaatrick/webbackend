@@ -1,38 +1,21 @@
 import os
 from pathlib import Path
-import cloudinary
-import cloudinary.uploader
-import cloudinary.api
 
-# Define the base directory
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Define the media directory where uploaded media files will be stored
+# Media files settings
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
-# Define the base URL for serving media files
 MEDIA_URL = '/media/'
 
-# Define the base URL for serving static files
+# Static files settings
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'staticfiles')]  # Changed to 'staticfiles' to avoid conflict
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-# Define additional directories from which to serve static files
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
-]
-
-# Define the directory where collected static files should be stored
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "your_default_secret_key")
-
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DJANGO_DEBUG", "False") == "True"
+ALLOWED_HOSTS = ['kabau.pythonanywhere.com']
 
-ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "*").split(",")
-
-# Application definition
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -59,8 +42,6 @@ INSTALLED_APPS = [
     'testimonials',
     'license',
     'users',
-    'cloudinary',
-    'cloudinary_storage',
     'category',
     'brands',
     'colors',
@@ -69,16 +50,6 @@ INSTALLED_APPS = [
     'product',
     'FileUpload'
 ]
-
-CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': os.getenv('CLOUD_NAME', 'dkekd92kz'),
-    'API_KEY': os.getenv('CLOUD_API_KEY', '187641184772337'),
-    'API_SECRET': os.getenv('CLOUD_API_SECRET', '8Hwz-YRED2DXRsspD_wzNDO67OI'),
-}
-
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-
-CLOUDINARY_URL = f"cloudinary://{os.getenv('CLOUD_API_KEY')}:{os.getenv('CLOUD_API_SECRET')}@{os.getenv('CLOUD_NAME')}"
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -92,40 +63,20 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True
-
 ROOT_URLCONF = "webbackend.urls"
-
-TEMPLATES = [
-    {
-        "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
-        "APP_DIRS": True,
-        "OPTIONS": {
-            "context_processors": [
-                "django.template.context_processors.debug",
-                "django.template.context_processors.request",
-                "django.contrib.auth.context_processors.auth",
-                "django.contrib.messages.context_processors.messages",
-            ],
-        },
-    },
-]
-
 WSGI_APPLICATION = "webbackend.wsgi.application"
 
-# Database
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.getenv('DB_NAME', 'disiweb'),
-        'USER': os.getenv('DB_USER', 'root'),
-        'PASSWORD': os.getenv('DB_PASSWORD', 'Pato@254'),
-        'HOST': os.getenv('DB_HOST', 'localhost'),
-        'PORT': os.getenv('DB_PORT', '3306'),
+        'NAME': 'Kabau$disiweb',
+        'USER': 'Kabau',
+        'PASSWORD': 'Pato@254',
+        'HOST': 'Kabau.mysql.pythonanywhere-services.com',
+        'PORT': '3306',
     }
 }
 
-# Password validation
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
@@ -159,7 +110,7 @@ REST_FRAMEWORK = {
     ),
 }
 
-EMAIL_BACKEND = 'django.core.mail.backends.async.smtp.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
@@ -167,3 +118,20 @@ EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', 'kabaupaatrick@gmail.com')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', 'pwci uumf rbhj vjdg')
 
 AUTH_USER_MODEL = 'users.User'
+
+# TEMPLATES configuration
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]

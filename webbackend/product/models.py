@@ -5,9 +5,25 @@ from django.utils import timezone
 from cloudinary.models import CloudinaryField
 from category.models import Category
 from brands.models import Brand
-from colors.models import Color 
+from colors.models import Color
 
+class Location(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    name = models.CharField(max_length=255)
+    parent = models.ForeignKey('self', null=True, blank=True, related_name='sub_locations', on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.name
+
+class DropOffPoint(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    location = models.ForeignKey(Location, related_name='drop_off_points', on_delete=models.CASCADE)
+    name = models.CharField(max_length=255)
+    address = models.TextField()
+    charges = models.DecimalField(max_digits=10, decimal_places=2)
+
+    def __str__(self):
+        return f"{self.name} - {self.address}"
 
 class ProductImage(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -23,6 +39,7 @@ class Product(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=255)
     description = models.TextField()
+    details = models.TextField()
     slug = models.SlugField(unique=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
@@ -31,10 +48,18 @@ class Product(models.Model):
     sold = models.IntegerField(default=0)
     colors = models.ManyToManyField(Color)
     image = models.ImageField(upload_to='media/products_images/')
-    tags = models.JSONField(default=list,null=True)
+    tags = models.JSONField(default=list, null=True)
     total_ratings = models.DecimalField(max_digits=5, decimal_places=2, default=0.0)
     ratings = models.JSONField(default=list)
     created_at = models.DateTimeField(default=timezone.now)  # Set default to current time
-    updated_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    # New fields
+    location = models.ForeignKey(Location, null=True, blank=True, on_delete=models.SET_NULL)
+    drop_off_point = models.ForeignKey(DropOffPoint, null=True, blank=True, on_delete=models.SET_NULL)
+    delivery_charges = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    units_left = models.IntegerField(default=0)  # New field for units left
+    related_products = models.ManyToManyField('self', blank=True, related_name='related_to', symmetrical=False)  # New field for related products
+
     def __str__(self):
         return self.title

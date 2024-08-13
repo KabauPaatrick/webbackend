@@ -1,4 +1,4 @@
-from django.urls import path, include
+from django.urls import path
 from rest_framework.routers import DefaultRouter
 from .views import UserRegistrationViewSet
 
@@ -10,6 +10,7 @@ urlpatterns = [
     path('create/', UserRegistrationViewSet.as_view({'post': 'create'}), name='user-create'),
     path('<uuid:pk>/update/', UserRegistrationViewSet.as_view({'put': 'update'}), name='user-update'),
     path('<uuid:pk>/delete/', UserRegistrationViewSet.as_view({'delete': 'destroy'}), name='user-delete'),
+
 ]
 
 urlpatterns += router.urls

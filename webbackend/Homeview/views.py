@@ -5,4 +5,4 @@ from .serializers import HomeViewSerializer
 class HomeViewViewSet(viewsets.ModelViewSet):
     queryset = HomeView.objects.all()
     serializer_class = HomeViewSerializer
-    lookup_field = 'id' 
+    lookup_field = 'id'  # Use 'id' for URL lookups
