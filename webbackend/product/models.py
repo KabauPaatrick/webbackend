@@ -6,24 +6,7 @@ from cloudinary.models import CloudinaryField
 from category.models import Category
 from brands.models import Brand
 from colors.models import Color
-
-class Location(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    name = models.CharField(max_length=255)
-    parent = models.ForeignKey('self', null=True, blank=True, related_name='sub_locations', on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.name
-
-class DropOffPoint(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    location = models.ForeignKey(Location, related_name='drop_off_points', on_delete=models.CASCADE)
-    name = models.CharField(max_length=255)
-    address = models.TextField()
-    charges = models.DecimalField(max_digits=10, decimal_places=2)
-
-    def __str__(self):
-        return f"{self.name} - {self.address}"
+from locations.models import Location,DropOffPoint
 
 class ProductImage(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

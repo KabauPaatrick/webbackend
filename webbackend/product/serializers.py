@@ -8,16 +8,7 @@ class ProductImageSerializer(serializers.ModelSerializer):
         model = ProductImage
         fields = ['id', 'product', 'file', 'asset_id', 'public_id']
         read_only_fields = ['id', 'asset_id', 'public_id']
-class LocationSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Location
-        fields = ['id', 'name', 'parent']
-class DropOffPointSerializer(serializers.ModelSerializer):
-    location = LocationSerializer()
 
-    class Meta:
-        model = DropOffPoint
-        fields = ['id', 'name', 'address', 'charges', 'location']
 class ProductSerializer(serializers.ModelSerializer):
     images = ProductImageSerializer(many=True, read_only=True)
     image_files = serializers.ListField(

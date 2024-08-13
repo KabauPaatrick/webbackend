@@ -48,8 +48,10 @@ INSTALLED_APPS = [
     'Enquiry',
     'payments',
     'product',
-    'FileUpload'
+    'FileUpload',
+    'locations'
 ]
+
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",

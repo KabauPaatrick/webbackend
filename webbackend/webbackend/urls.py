@@ -24,8 +24,15 @@ urlpatterns = [
     path('api/color/', include('colors.urls')),
     path('api/enquiry/', include('Enquiry.urls')),
     path('api/payments/', include('payments.urls')),
+<<<<<<< HEAD
     path('api/uploads/', include('FileUpload.urls')),
     # path('api/fileupload/', include(fileupload_router.urls)),
+=======
+    path('api/location/', include('locations.urls')),
+    path('api/uploads/', include('FileUpload.urls')),  # Include FileUpload app URLs
+    path('api/', include(fileupload_router.urls)),  # Register FileUploadViewSet with DefaultRouter
+    
+>>>>>>> 31e0ec9990aab156c7edc73020858bc384bc2f67
 ]
 
 if settings.DEBUG:
